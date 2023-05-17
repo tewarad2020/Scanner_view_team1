@@ -61,6 +61,7 @@ class _ScannerViewState extends State<ScannerView> {
             size: 35, 
             color: kPrimaryLightColor,
             onPressed: () async {
+              controller.pauseCamera();
               await _alertConfirmRollback();
             }
           ) 
@@ -114,9 +115,11 @@ class _ScannerViewState extends State<ScannerView> {
         leftButtonText: 'ยกเลิก',
         rightButtonText: 'ยืนยัน',
         onUserPressedLeftButton: () async {
+          controller.resumeCamera();
           Navigator.pop(context);
         },
         onUserPressedRightButton: () async {
+          controller.resumeCamera();
           Navigator.pop(context);
           Navigator.pop(context);
         },
