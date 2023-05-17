@@ -7,13 +7,17 @@ import 'package:collection/collection.dart';
 
 class ScannerViewModel {
   List<Product> itemsInCardList = [];
+  // TODO : fixed
+  Map<String, int> amonutItemsInCardList = {};
   String _inputStr = '';
 
   // final ScannerServiceInterface _service = ScannerService();
   final ScannerServiceInterface _service = ScannerMockService();
 
   void initScanner() {
+    // TODO : fixed
     itemsInCardList.clear();
+    amonutItemsInCardList.clear();
   }
 
   void setInputStr({required String value}) {
@@ -29,21 +33,21 @@ class ScannerViewModel {
     scannedItem = itemsInCardList.firstWhereOrNull((element) => element.barcode == barcode);
 
     if (scannedItem != null) {
-      final bool increaseAble = scannedItem.tryIncreaseAmountItemInCardList();
+      final bool increaseAble = tryIncreaseAmountItemInCardList(item: scannedItem);
       if (increaseAble) {
-        scannedItem.amount--;
-        scannedItem.itemsInCardList++;
+        // TODO : fixed
+        amonutItemsInCardList[scannedItem.skuId] = amonutItemsInCardList[scannedItem.skuId]! + 1;
       }else {
         throw ProductRunOutOfStockError(errorStatus: 200, message: 'Product run out of stock');
       }
     }else {
       try {
         scannedItem = await _service.fetchProductByBarcode(barcode: barcode);
-        final bool increaseAble = scannedItem.tryIncreaseAmountItemInCardList();
+        final bool increaseAble = tryIncreaseAmountItemInCardList(item: scannedItem);
         if (increaseAble) {
+          // TODO : fixed
           itemsInCardList.add(scannedItem);
-          scannedItem.amount--;
-          scannedItem.itemsInCardList++;
+          amonutItemsInCardList[scannedItem.skuId] = 1;
         }else {
           throw ProductRunOutOfStockError(errorStatus: 200, message: 'Product run out of stock');
         }
@@ -58,21 +62,21 @@ class ScannerViewModel {
     identifiedItem = itemsInCardList.firstWhereOrNull((element) => element.barcode == keyword);
 
     if (identifiedItem != null) {
-      final bool increaseAble = identifiedItem.tryIncreaseAmountItemInCardList();
+      final bool increaseAble = tryIncreaseAmountItemInCardList(item: identifiedItem);
       if (increaseAble) {
-        identifiedItem.amount--;
-        identifiedItem.itemsInCardList++;
+        // TODO : fixed
+        amonutItemsInCardList[identifiedItem.skuId] = amonutItemsInCardList[identifiedItem.skuId]! + 1;
       }else {
         throw ProductRunOutOfStockError(errorStatus: 200, message: 'Product run out of stock');
       }
     }else {
       try {
         identifiedItem = await _service.fetchProductById(keyword: keyword);
-        final bool increaseAble = identifiedItem.tryIncreaseAmountItemInCardList();
+        final bool increaseAble = tryIncreaseAmountItemInCardList(item: identifiedItem);
         if (increaseAble) {
+          // TODO : fixed
           itemsInCardList.add(identifiedItem);
-          identifiedItem.amount--;
-          identifiedItem.itemsInCardList++;
+          amonutItemsInCardList[identifiedItem.skuId] = 1;
         }else {
           throw ProductRunOutOfStockError(errorStatus: 200, message: 'Product run out of stock');
         }
@@ -83,9 +87,25 @@ class ScannerViewModel {
   }
 
   void onUserPressedDeleteButton({required int index}) {
-    itemsInCardList[index].amount += itemsInCardList[index].itemsInCardList;
-    itemsInCardList[index].itemsInCardList = 0;
+    // TODO : fixed
+    amonutItemsInCardList[itemsInCardList[index].skuId] = 0;
     itemsInCardList.removeAt(index);
+  }
+
+  // TODO : fixed
+  bool tryIncreaseAmountItemInCardList({required Product item}) {
+    if (amonutItemsInCardList[item.skuId] != null) {
+      if (item.remainInStock > amonutItemsInCardList[item.skuId]! + item.amount) {
+        return true;
+      }
+      return false;
+    }else {
+      if (item.remainInStock > item.amount) {
+        return true;
+      }
+      return false;
+    }
+    
   }
 
 }

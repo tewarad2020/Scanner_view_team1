@@ -4,8 +4,8 @@ class Product {
   late String nickname;
   late String barcode;
   late int amount;
-  late double unitPrice;
-  late int itemsInCardList;
+  late double price;
+  late int remainInStock;
 
   Product({
     required this.name, 
@@ -13,15 +13,8 @@ class Product {
     required this.skuId, 
     required this.barcode, 
     required this.amount, 
-    required this.unitPrice,
-    required this.itemsInCardList
+    required this.price,
+    required this.remainInStock
   });
 
-  bool tryIncreaseAmountItemInCardList() {
-    if (amount >= 1) {
-      return true;
-    }
-
-    return false;
-  }
 }

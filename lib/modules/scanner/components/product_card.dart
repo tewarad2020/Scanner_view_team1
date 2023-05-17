@@ -8,10 +8,14 @@ class ProductCard extends StatefulWidget {
   const ProductCard({
     Key? key,
     required this.model,
+    // TODO : fixed
+    required this.amonutItemsInCardList,
     required this.onUserPressedDeleteButton,
   }) : super(key: key);
 
   final Product model;
+  // TODO : fixed
+  final Map<String, int> amonutItemsInCardList;
   final void Function() onUserPressedDeleteButton;
 
   @override
@@ -55,7 +59,8 @@ class _ProductCardState extends State<ProductCard> {
                 decoration: kIndicatorDecoration,
                 child: Center(
                   child: Text(
-                    widget.model.itemsInCardList.toString(),
+                    // TODO : fixed
+                    widget.amonutItemsInCardList[widget.model.skuId].toString(),
                     style: kIndicatorTextStyle,
                   ),
                 ),

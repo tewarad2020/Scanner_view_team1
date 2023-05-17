@@ -441,6 +441,8 @@ class _ScannerViewState extends State<ScannerView> {
   }) {
     return ProductCard(
       model: item,
+      // TODO : fixed
+      amonutItemsInCardList: _viewModel.amonutItemsInCardList,
       onUserPressedDeleteButton: () {
         controller.pauseCamera();
         showDialog(
@@ -449,7 +451,8 @@ class _ScannerViewState extends State<ScannerView> {
           builder: (context) => ConfirmDelete(
             icon: Icons.delete_forever, 
             title: 'ลบสินค้าทั้งหมด',
-            content: 'สินค้าทั้งหมดจำนวน : ${item.itemsInCardList} ชิ้น',
+            // TODO : fixed
+            content: 'สินค้าทั้งหมดจำนวน : ${_viewModel.amonutItemsInCardList[item.skuId]} ชิ้น',
             leftButtonText: 'ยกเลิก',
             rightButtonText: 'ยืนยัน',
             onUserPressedAcceptButton: () {
